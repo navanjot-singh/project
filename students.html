@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Students{% endblock %}
+{% block page_title %}Students{% endblock %}
+{% block breadcrumb %}Manage enrolled students{% endblock %}
+{% block topbar_actions %}
+  <a href="{{ url_for('add_student') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Student</a>
+{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-bottom:20px;">
+  <form method="GET" style="display:flex;gap:16px;align-items:flex-end;">
+    <div class="form-group" style="flex:1;margin:0;">
+      <label>Filter by Department</label>
+      <select name="dept_id" onchange="this.form.submit()">
+        <option value="">All Departments</option>
+        {% for dept in departments %}
+        <option value="{{ dept.id }}" {% if dept_id == dept.id %}selected{% endif %}>{{ dept.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group" style="flex:1;margin:0;">
+      <label>Filter by Semester</label>
+      <select name="semester" onchange="this.form.submit()">
+        <option value="">All Semesters</option>
+        {% for s in range(1,7) %}
+        <option value="{{ s }}" {% if semester == s %}selected{% endif %}>Semester {{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <a href="{{ url_for('students') }}" class="btn btn-secondary">Clear</a>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">{{ students|length }} Students</span>
+  </div>
+  {% if students %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Roll No</th><th>Name</th><th>Department</th>
+          <th>Sem</th><th>Year</th><th>Email</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td class="roll-mono">{{ student.roll_no }}</td>
+          <td>
+            <a href="{{ url_for('student_results', student_id=student.id) }}" style="color:var(--text);text-decoration:none;font-weight:600;hover:color:var(--accent)">
+              {{ student.name }}
+            </a>
+          </td>
+          <td>
+            <span class="badge badge-admin">{{ student.department.code }}</span>
+          </td>
+          <td style="font-family:'DM Mono',monospace;">{{ student.semester }}</td>
+          <td style="font-family:'DM Mono',monospace;">{{ student.year }}</td>
+          <td style="font-size:13px;color:var(--muted);">{{ student.email }}</td>
+          <td>
+            <div style="display:flex;gap:8px;">
+              <a href="{{ url_for('student_results', student_id=student.id) }}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-eye"></i> Results
+              </a>
+              <a href="{{ url_for('edit_student', student_id=student.id) }}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-pen"></i>
+              </a>
+              <form method="POST" action="{{ url_for('delete_student', student_id=student.id) }}"
+                    onsubmit="return confirm('Delete {{ student.name }}?')">
+                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="fas fa-user-graduate"></i>
+    <p>No students found. <a href="{{ url_for('add_student') }}" style="color:var(--accent);">Add one</a>.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

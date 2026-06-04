@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}{{ student.name }} — Results{% endblock %}
+{% block page_title %}{{ student.name }}{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('students') }}" style="color:var(--muted);text-decoration:none;">Students</a> / Results{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start;">
+  <div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="text-align:center;">
+        <div style="width:64px;height:64px;background:var(--accent2);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;margin:0 auto 12px;">{{ student.name[0] }}</div>
+        <h3 style="font-size:17px;font-weight:700;">{{ student.name }}</h3>
+        <div class="roll-mono" style="margin:4px 0 12px;">{{ student.roll_no }}</div>
+        <div style="font-size:12px;color:var(--muted);">{{ student.department.name }}</div>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:11px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Overall CGPA</div>
+      <div class="cgpa-display">{{ "%.2f"|format(overall_cgpa) }}</div>
+      <div style="font-size:12px;color:var(--muted);">out of 10.0</div>
+      <div style="margin-top:12px;background:var(--bg3);border-radius:6px;overflow:hidden;height:5px;">
+        <div style="height:100%;background:var(--accent);width:{{ (overall_cgpa/10)*100 }}%;border-radius:6px;"></div>
+      </div>
+    </div>
+    {% if sgpa_by_sem %}
+    <div class="card" style="margin-top:16px;">
+      <div style="font-size:12px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;">SGPA by Semester</div>
+      {% for sem, sgpa in sgpa_by_sem.items()|sort %}
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;color:var(--muted);">Semester {{ sem }}</span>
+        <span style="font-family:'DM Mono',monospace;font-weight:700;color:var(--accent);">{{ "%.2f"|format(sgpa) }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Detailed Results</span></div>
+    {% if results %}
+    {% set sems = results|map(attribute='Result.semester')|list|unique|sort %}
+    {% for sem in results|map(attribute='Result.semester')|list|unique|sort %}
+    <div style="margin-bottom:28px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h4 style="font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Semester {{ sem }}</h4>
+        {% if sgpa_by_sem.get(sem) %}
+        <span style="font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);">SGPA: {{ "%.2f"|format(sgpa_by_sem[sem]) }}</span>
+        {% endif %}
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Subject</th><th>Code</th><th>Credits</th><th>Internal</th><th>External</th><th>Total</th><th>Grade</th><th>GP</th></tr></thead>
+          <tbody>
+            {% for result, subject in results if result.semester == sem %}
+            <tr>
+              <td style="font-weight:600;">{{ subject.name }}</td>
+              <td class="roll-mono">{{ subject.code }}</td>
+              <td style="font-family:'DM Mono',monospace;">{{ subject.credits }}</td>
+              <td style="font-family:'DM Mono',monospace;">{{ result.internal_marks }}/30</td>
+              <td style="font-family:'DM Mono',monospace;">{{ result.external_marks }}/70</td>
+              <td style="font-family:'DM Mono',monospace;font-weight:700;">{{ result.total_marks }}/100</td>
+              <td>
+                {% set g = result.grade %}
+                <span class="grade grade-{{ g.replace('+','p') }}">{{ g }}</span>
+              </td>
+              <td style="font-family:'DM Mono',monospace;color:var(--accent);">{{ result.grade_point }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state"><i class="fas fa-inbox"></i><p>No results recorded yet.</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — SRMS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14; --bg2: #13161d; --bg3: #1a1e28;
+      --border: #252a38; --accent: #e8c547; --text: #e8e9ef; --muted: #7a7f96;
+      --red: #e05252; --green: #52c97e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+    .left {
+      flex: 1;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .left::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(232,197,71,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .brand { text-align: center; position: relative; z-index: 1; }
+    .brand-icon {
+      width: 72px; height: 72px;
+      background: var(--accent);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 800; color: #000;
+      margin: 0 auto 24px;
+      font-family: 'Playfair Display', serif;
+    }
+    .brand h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .brand p { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 320px; }
+    .features { margin-top: 48px; display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px; }
+    .feature-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .feature-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(232,197,71,0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 14px; flex-shrink: 0; }
+    .feature-text h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .feature-text p { font-size: 12px; color: var(--muted); }
+    .right {
+      width: 440px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 48px;
+    }
+    .login-box { width: 100%; }
+    .login-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .login-box .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap i {
+      position: absolute;
+      left: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted); font-size: 14px;
+    }
+    input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px 12px 42px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232,197,71,0.08);
+    }
+    .btn-login {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 8px;
+    }
+    .btn-login:hover { background: #f0d060; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(232,197,71,0.2); }
+    .demo-creds {
+      margin-top: 28px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .demo-creds h4 { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px; }
+    .cred-row { display: flex; justify-content: space-between; padding: 4px 0; }
+    .cred-row span:first-child { color: var(--muted); }
+    .cred-row code { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent); }
+    .alert {
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .alert-danger { background: rgba(224,82,82,0.1); border: 1px solid rgba(224,82,82,0.3); color: var(--red); }
+  </style>
+</head>
+<body>
+<div class="left">
+  <div class="brand">
+    <div class="brand-icon">S</div>
+    <h1>Result Management System</h1>
+    <p>A comprehensive academic platform for managing student results, grades, and performance analytics.</p>
+  </div>
+  <div class="features">
+    <div class="feature-item">
+      <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="feature-text">
+        <h4>CGPA & SGPA Tracking</h4>
+        <p>Automatic grade point calculations</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon"><i class="fas fa-users"></i></div>
+      <div class="feature-text">
+        <h4>Role-Based Access</h4>
+        <p>Admin, Teacher & Student portals</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon"><i class="fas fa-file-chart-column"></i></div>
+      <div class="feature-text">
+        <h4>Detailed Reports</h4>
+        <p>Topper lists & performance analysis</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="right">
+  <div class="login-box">
+    <h2>Welcome back</h2>
+    <p class="subtitle">Sign in to your account to continue</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="alert alert-{{ cat }}"><i class="fas fa-circle-exclamation"></i> {{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    <form method="POST">
+      <div class="form-group">
+        <label>Username</label>
+        <div class="input-wrap">
+          <i class="fas fa-user"></i>
+          <input type="text" name="username" placeholder="Enter your username" required autofocus>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-login"><i class="fas fa-arrow-right-to-bracket"></i> Sign In</button>
+    </form>
+    <div class="demo-creds">
+      <h4>Demo Credentials</h4>
+      <div class="cred-row"><span>Admin:</span> <code>admin / admin123</code></div>
+      <div class="cred-row"><span>Teacher:</span> <code>teacher1 / teacher123</code></div>
+      <div class="cred-row"><span>Student:</span> <code>MCA2024001 / MCA2024001</code></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Edit Student{% endblock %}
+{% block page_title %}Edit Student{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('students') }}" style="color:var(--muted);text-decoration:none;">Students</a> / Edit{% endblock %}
+{% block content %}
+<div class="card" style="max-width:720px;">
+  <div class="card-header"><span class="card-title">Edit: {{ student.name }}</span></div>
+  <form method="POST">
+    <div class="form-grid">
+      <div class="form-group"><label>Roll Number</label><input type="text" value="{{ student.roll_no }}" disabled></div>
+      <div class="form-group"><label>Full Name</label><input type="text" name="name" value="{{ student.name }}" required></div>
+      <div class="form-group"><label>Email</label><input type="email" name="email" value="{{ student.email }}" required></div>
+      <div class="form-group"><label>Phone</label><input type="text" name="phone" value="{{ student.phone }}"></div>
+      <div class="form-group">
+        <label>Department</label>
+        <select name="dept_id" required>
+          {% for dept in departments %}
+          <option value="{{ dept.id }}" {% if dept.id == student.dept_id %}selected{% endif %}>{{ dept.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Semester</label>
+        <select name="semester" required>
+          {% for s in range(1,7) %}<option value="{{ s }}" {% if s == student.semester %}selected{% endif %}>Semester {{ s }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="form-group"><label>Admission Year</label><input type="number" name="year" value="{{ student.year }}" required></div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:24px;">
+      <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+      <a href="{{ url_for('students') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

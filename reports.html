@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Reports{% endblock %}
+{% block page_title %}Reports & Analytics{% endblock %}
+{% block breadcrumb %}Performance analysis{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+  <a href="{{ url_for('topper_report') }}" style="text-decoration:none;">
+    <div class="card" style="text-align:center;padding:32px;cursor:pointer;transition:border-color 0.2s;border:1px solid var(--border);" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      <i class="fas fa-trophy" style="font-size:36px;color:var(--accent);margin-bottom:16px;display:block;"></i>
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">Topper Report</h3>
+      <p style="font-size:13px;color:var(--muted);">View top-performing students ranked by CGPA</p>
+    </div>
+  </a>
+  <a href="{{ url_for('students') }}" style="text-decoration:none;">
+    <div class="card" style="text-align:center;padding:32px;cursor:pointer;transition:border-color 0.2s;border:1px solid var(--border);" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+      <i class="fas fa-user-graduate" style="font-size:36px;color:var(--green);margin-bottom:16px;display:block;"></i>
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">Student Roster</h3>
+      <p style="font-size:13px;color:var(--muted);">Full list of enrolled students</p>
+    </div>
+  </a>
+  <a href="{{ url_for('bulk_results') }}" style="text-decoration:none;">
+    <div class="card" style="text-align:center;padding:32px;cursor:pointer;transition:border-color 0.2s;border:1px solid var(--border);" onmouseover="this.style.borderColor='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)'">
+      <i class="fas fa-table-list" style="font-size:36px;color:var(--accent2);margin-bottom:16px;display:block;"></i>
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">Bulk Results</h3>
+      <p style="font-size:13px;color:var(--muted);">Enter or review class-wide marks</p>
+    </div>
+  </a>
+</div>
+{% endblock %}

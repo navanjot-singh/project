@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Enter Results{% endblock %}
+{% block page_title %}Enter Results{% endblock %}
+{% block breadcrumb %}Record individual student marks{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:620px;">
+  <div class="card-header"><span class="card-title">Single Result Entry</span></div>
+  <form method="POST">
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Student</label>
+        <select name="student_id" required>
+          <option value="">Select Student</option>
+          {% for s in students %}
+          <option value="{{ s.id }}">{{ s.name }} ({{ s.roll_no }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Subject</label>
+        <select name="subject_id" required>
+          <option value="">Select Subject</option>
+          {% for s in subjects %}
+          <option value="{{ s.id }}">{{ s.name }} ({{ s.code }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Internal Marks (out of 30)</label>
+        <input type="number" name="internal_marks" min="0" max="30" step="0.5" placeholder="0–30" required>
+      </div>
+      <div class="form-group">
+        <label>External Marks (out of 70)</label>
+        <input type="number" name="external_marks" min="0" max="70" step="0.5" placeholder="0–70" required>
+      </div>
+      <div class="form-group">
+        <label>Semester</label>
+        <select name="semester" required>
+          {% for s in range(1,7) %}<option value="{{ s }}">Semester {{ s }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Exam Year</label>
+        <input type="number" name="exam_year" value="{{ current_year }}" min="2000" max="2030" required>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding:14px;background:var(--bg3);border-radius:10px;font-size:13px;color:var(--muted);border:1px solid var(--border);">
+      <i class="fas fa-circle-info" style="color:var(--blue);margin-right:6px;"></i>
+      Grade scale: O(90+) A+(80+) A(70+) B+(60+) B(50+) C(40+) F(&lt;40) | If a result exists for same student/subject/year/sem, it will be <strong>updated</strong>.
+    </div>
+    <div style="display:flex;gap:12px;margin-top:20px;">
+      <button type="submit" class="btn btn-primary"><i class="fas fa-floppy-disk"></i> Save Result</button>
+      <a href="{{ url_for('bulk_results') }}" class="btn btn-secondary"><i class="fas fa-table-list"></i> Switch to Bulk</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

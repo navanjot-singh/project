@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Departments{% endblock %}
+{% block page_title %}Departments{% endblock %}
+{% block breadcrumb %}Academic departments{% endblock %}
+{% block topbar_actions %}<a href="{{ url_for('add_department') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Department</a>{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header"><span class="card-title">{{ departments|length }} Departments</span></div>
+  {% if departments %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Department Name</th><th>Code</th><th>Students</th><th>Subjects</th></tr></thead>
+      <tbody>
+        {% for dept in departments %}
+        <tr>
+          <td style="font-weight:600;">{{ dept.name }}</td>
+          <td><span class="badge badge-admin">{{ dept.code }}</span></td>
+          <td style="font-family:'DM Mono',monospace;">{{ dept.students|length }}</td>
+          <td style="font-family:'DM Mono',monospace;">{{ dept.subjects|length }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state"><i class="fas fa-building-columns"></i><p>No departments yet.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

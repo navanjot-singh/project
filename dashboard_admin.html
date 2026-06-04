@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Overview of academic system{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card gold">
+    <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+    <div class="stat-value">{{ stats.students }}</div>
+    <div class="stat-label">Total Students</div>
+  </div>
+  <div class="stat-card purple">
+    <div class="stat-icon"><i class="fas fa-book"></i></div>
+    <div class="stat-value">{{ stats.subjects }}</div>
+    <div class="stat-label">Subjects</div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-icon"><i class="fas fa-building-columns"></i></div>
+    <div class="stat-value">{{ stats.departments }}</div>
+    <div class="stat-label">Departments</div>
+  </div>
+  <div class="stat-card blue">
+    <div class="stat-icon"><i class="fas fa-file-lines"></i></div>
+    <div class="stat-value">{{ stats.results }}</div>
+    <div class="stat-label">Results Entered</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Recent Results</span>
+      <a href="{{ url_for('enter_results') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add</a>
+    </div>
+    {% if recent_results %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Student</th><th>Subject</th><th>Total</th><th>Grade</th></tr></thead>
+        <tbody>
+          {% for result, student, subject in recent_results %}
+          <tr>
+            <td>
+              <div style="font-weight:600;font-size:14px;">{{ student.name }}</div>
+              <div class="roll-mono">{{ student.roll_no }}</div>
+            </td>
+            <td style="font-size:13px;">{{ subject.name }}</td>
+            <td style="font-family:'DM Mono',monospace;font-size:14px;">{{ result.total_marks }}/100</td>
+            <td>
+              {% set g = result.grade %}
+              <span class="grade grade-{{ g.replace('+','p') }}">{{ g }}</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state"><i class="fas fa-inbox"></i><p>No results yet.</p></div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Quick Actions</span></div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <a href="{{ url_for('add_student') }}" class="btn btn-secondary" style="justify-content:flex-start;">
+        <i class="fas fa-user-plus" style="color:var(--green);width:20px;"></i> Add New Student
+      </a>
+      <a href="{{ url_for('add_subject') }}" class="btn btn-secondary" style="justify-content:flex-start;">
+        <i class="fas fa-book-medical" style="color:var(--blue);width:20px;"></i> Add New Subject
+      </a>
+      <a href="{{ url_for('bulk_results') }}" class="btn btn-secondary" style="justify-content:flex-start;">
+        <i class="fas fa-table-list" style="color:var(--accent2);width:20px;"></i> Bulk Result Entry
+      </a>
+      <a href="{{ url_for('topper_report') }}" class="btn btn-secondary" style="justify-content:flex-start;">
+        <i class="fas fa-trophy" style="color:var(--accent);width:20px;"></i> Topper Report
+      </a>
+      <a href="{{ url_for('add_department') }}" class="btn btn-secondary" style="justify-content:flex-start;">
+        <i class="fas fa-building-columns" style="color:var(--red);width:20px;"></i> Add Department
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
